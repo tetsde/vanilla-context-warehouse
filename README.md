@@ -23,42 +23,24 @@ Trong các hệ thống RAG truyền thống:
 ## 📐 Kiến Trúc Hệ Thống (System Architecture)
 
 ```mermaid
-flowchart TD
-    User([User Query]) --> Server[FastAPI Server / Composer API]
+flowchart LR
+    User([👤 User Query]) --> Planner[🧠 1. Context Planner<br/>Intent & Section Targeting]
     
-    subgraph Context_Warehouse_Storage [Context Warehouse Layer]
-        Catalog[(Catalog Metadata)]
-        DB[(Relational DB: warehouse.db)]
-        Policies[Markdown Policies /context]
-        Graph[(Semantic Relationships)]
+    subgraph Storage [🗄️ Context Warehouse Storage]
+        direction TB
+        DB[(Relational DB<br/>SQLite)]
+        Policies[Policies<br/>Markdown]
     end
 
-    subgraph Pipeline_Engine [7-Checkpoint Pipeline Engine]
-        CP1[1. Init & Catalog Snapshot]
-        CP2[2. Context Planner - Gemini]
-        CP3[3. Section-Level Retriever]
-        CP4[4. Completeness Validator]
-        CP5[5. Context Package & Cleaner]
-        CP6[6. Response Synthesizer - Gemini]
-        CP7[7. Telemetry & Tracer]
-    end
+    Planner -->|Target Plan| Retriever[🔍 2. Context Retriever<br/>SQL Query + Section Slice]
+    Storage -.-> Retriever
 
-    Server --> CP1
-    Catalog -.-> CP1
-    CP1 --> CP2
-    CP2 -->|Plan: Tables, Sections, Entities| CP3
-    
-    DB -.->|SQL Queries| CP3
-    Policies -.->|Section Slicing| CP3
-    
-    CP3 -->|Retrieved Context| CP4
-    CP4 -->|Validation Score & Audit| CP5
-    CP5 -->|Clean Prompt Block| CP6
-    CP6 -->|Final Accurate Answer| CP7
-    CP7 --> Frontend[Monochrome Monitoring Dashboard]
+    Retriever --> Validator[🛡️ 3. Completeness Validator<br/>Audit & Score]
+    Validator --> Package[📦 4. Context Package<br/>Clean Prompt Blocks]
+    Package --> Synthesizer[🤖 5. Response Synthesizer<br/>Gemini AI]
+    Synthesizer --> Output([💬 Accurate Response])
 
-    style Pipeline_Engine fill:#121212,stroke:#ffffff,stroke-width:1px,color:#ffffff
-    style Context_Warehouse_Storage fill:#080808,stroke:#737373,stroke-width:1px,color:#ffffff
+    style Storage fill:#111111,stroke:#666666,stroke-width:1px,color:#ffffff
 ```
 
 ---
