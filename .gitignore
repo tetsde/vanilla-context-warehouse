@@ -34,9 +34,10 @@ venv.bak/
 .env.*.local
 *.env
 
-# SQLite Database (uncomment if you don't want to track local db)
-# *.db
-# *.sqlite3
+# SQLite Database
+*.db
+*.sqlite
+*.sqlite3
 
 # IDEs & Editors
 .vscode/
