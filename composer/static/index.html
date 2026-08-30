@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Context Warehouse - Monitor</title>
+  
+  <!-- Standard Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- HEADER -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <span class="brand-title">CONTEXT WAREHOUSE</span>
+        <span class="brand-sub">/ PIPELINE MONITOR</span>
+      </div>
+
+      <div class="nav-actions">
+        <div id="system-status" class="status-badge status-loading">
+          <span class="status-msg">Đang kết nối...</span>
+        </div>
+        <button id="btn-open-catalog" class="btn btn-secondary">Catalog</button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-layout">
+      
+      <!-- 1. QUERY BOX -->
+      <section class="card query-section">
+        <div class="query-header">
+          <label for="query-input" class="section-title">Query Request</label>
+          <span class="shortcut-tip">Enter để gửi</span>
+        </div>
+
+        <div class="input-group">
+          <textarea 
+            id="query-input" 
+            placeholder="Nhập câu hỏi tra cứu (ví dụ: Khách hàng Nguyễn Văn An muốn kiểm tra đơn hàng 5 và điều kiện hoàn tiền)..."
+            rows="2"
+          ></textarea>
+          <button id="btn-submit" class="btn btn-primary">Gửi</button>
+        </div>
+
+        <!-- Quick Suggestions -->
+        <div class="quick-tags">
+          <span class="tags-label">Mẫu nhanh:</span>
+          <div class="tags-list">
+            <button class="chip" data-query="Khách hàng Nguyễn Văn An muốn kiểm tra đơn hàng 5 và điều kiện hoàn tiền">
+              Khách An & Hoàn tiền đơn 5
+            </button>
+            <button class="chip" data-query="Kiểm tra danh sách đơn hàng của khách hàng Nguyễn Văn An và các sản phẩm đã mua?">
+              Danh sách đơn & sản phẩm của An
+            </button>
+            <button class="chip" data-query="Chính sách giao hàng hỏa tốc 2 giờ có miễn phí cho khách hàng Gold và Platinum không?">
+              Phí ship hỏa tốc 2h cho VIP
+            </button>
+            <button class="chip" data-query="Khách hàng hạng Platinum được đổi trả hàng trong bao lâu và có mất phí không?">
+              Chính sách đổi trả Platinum
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. KEY METRICS BAR (4 CORE METRICS) -->
+      <section class="metrics-grid">
+        <!-- Metric 1: Completeness Score -->
+        <div class="card metric-card">
+          <span class="metric-title">Completeness Score</span>
+          <div class="metric-main">
+            <span id="metric-completeness-val" class="metric-number">--%</span>
+            <span id="metric-completeness-badge" class="badge">CHƯA CHẠY</span>
+          </div>
+          <span id="metric-completeness-desc" class="metric-note">Mức độ đầy đủ ngữ cảnh</span>
+        </div>
+
+        <!-- Metric 2: Latency -->
+        <div class="card metric-card">
+          <span class="metric-title">Latency</span>
+          <div class="metric-main">
+            <span id="metric-latency-val" class="metric-number">0.00s</span>
+          </div>
+          <span id="metric-latency-desc" class="metric-note">Thời gian thực thi</span>
+        </div>
+
+        <!-- Metric 3: Intent & Entities -->
+        <div class="card metric-card">
+          <span class="metric-title">Intent & Entities</span>
+          <div class="metric-main">
+            <span id="metric-intent-val" class="metric-text">-</span>
+          </div>
+          <span id="metric-entities-val" class="metric-note">-</span>
+        </div>
+
+        <!-- Metric 4: Context Sources Count -->
+        <div class="card metric-card">
+          <span class="metric-title">Context Sources</span>
+          <div class="metric-main">
+            <span id="metric-sources-val" class="metric-text">0 sources</span>
+          </div>
+          <span id="metric-sources-desc" class="metric-note">-</span>
+        </div>
+      </section>
+
+      <!-- 3. MAIN RESULT & ANSWER SECTION -->
+      <section class="card answer-card">
+        <div class="answer-header">
+          <div class="answer-title">
+            <span>Synthesized Answer</span>
+            <span id="answer-model-tag" class="model-tag">Gemini</span>
+          </div>
+          <button id="btn-copy-answer" class="btn btn-sm btn-secondary">Sao chép</button>
+        </div>
+
+        <div id="ai-answer-body" class="answer-body markdown-content">
+          <div class="empty-state">
+            <p>Nhập câu hỏi và nhấn <strong>Gửi</strong> để thực thi quy trình Context Warehouse.</p>
+          </div>
+        </div>
+
+        <!-- Warning Alert Banner -->
+        <div id="alert-banner" class="alert-banner hidden">
+          <div class="alert-label">[CẢNH BÁO]</div>
+          <div class="alert-text" id="alert-content"></div>
+        </div>
+      </section>
+
+      <!-- 4. CONTEXT SOURCES INSPECTION -->
+      <section class="card sources-card">
+        <div class="sources-header">
+          <span class="section-title">Retrieved Context</span>
+          <div class="sources-tabs">
+            <button class="tab-btn active" data-source-tab="tab-db">
+              Database (<span id="db-records-count">0</span>)
+            </button>
+            <button class="tab-btn" data-source-tab="tab-policies">
+              Policies (<span id="policy-count">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <div class="sources-content">
+          <!-- DB Records Tab -->
+          <div id="tab-db" class="source-pane active">
+            <div id="db-records-container" class="records-grid">
+              <div class="empty-hint">Chưa có dữ liệu.</div>
+            </div>
+          </div>
+
+          <!-- Policy Tab -->
+          <div id="tab-policies" class="source-pane">
+            <div id="policies-container" class="policies-list">
+              <div class="empty-hint">Chưa có chính sách nào.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. ADVANCED / DEBUG DETAILS (COLLAPSIBLE) -->
+      <section class="card debug-card">
+        <details id="debug-details">
+          <summary class="debug-summary">
+            <span>[+] Debug Logs & Timings</span>
+          </summary>
+          
+          <div class="debug-content">
+            <div class="debug-grid">
+              <div class="debug-box">
+                <h4>Checkpoints Timing</h4>
+                <div id="debug-timings" class="timings-list">
+                  <span class="text-muted">Chưa có log.</span>
+                </div>
+              </div>
+
+              <div class="debug-box">
+                <h4>Context Package Schema</h4>
+                <pre><code id="debug-schema-json">// JSON Schema</code></pre>
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+    </main>
+
+    <!-- CATALOG MODAL -->
+    <div id="catalog-modal" class="modal-backdrop hidden">
+      <div class="modal-box">
+        <div class="modal-top">
+          <span class="modal-title">Warehouse Catalog</span>
+          <button id="btn-close-modal" class="btn-close">[Đóng]</button>
+        </div>
+
+        <div class="modal-tabs">
+          <button class="modal-tab active" data-mtab="mtab-tables">Tables</button>
+          <button class="modal-tab" data-mtab="mtab-policies">Policies</button>
+          <button class="modal-tab" data-mtab="mtab-graph">Relationships</button>
+        </div>
+
+        <div class="modal-body">
+          <div id="mtab-tables" class="modal-pane active">
+            <div id="modal-tables-content" class="catalog-cards-grid">Đang tải...</div>
+          </div>
+          <div id="mtab-policies" class="modal-pane">
+            <div id="modal-policies-content" class="catalog-cards-grid">Đang tải...</div>
+          </div>
+          <div id="mtab-graph" class="modal-pane">
+            <div id="modal-graph-content" class="graph-cards-grid">Đang tải...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+[
+  {
+    "id": "CASE_1",
+    "name": "Khách VIP & Điều kiện hoàn tiền đơn hàng",
+    "query": "Khách hàng Nguyễn Văn An muốn kiểm tra đơn hàng 5 và điều kiện hoàn tiền",
+    "intent": "order_lookup",
+    "entities": {
+      "customer": "Nguyễn Văn An",
+      "order_id": "5",
+      "product": null,
+      "tier": null
+    },
+    "required_context": [
+      "customers",
+      "orders",
+      "refund_policy"
+    ],
+    "sources_retrieved": [
+      "customers",
+      "orders",
+      "refund_policy"
+    ],
+    "completeness_score": 100,
+    "total_duration_ms": 15163.2,
+    "checkpoints": [
+      {
+        "step": 1,
+        "name": "Khởi Tạo Yêu Cầu & Snapshot Catalog",
+        "duration_ms": 1.6
+      },
+      {
+        "step": 2,
+        "name": "Context Planner (AI Planning)",
+        "duration_ms": 9487.9
+      },
+      {
+        "step": 3,
+        "name": "Context Retriever (Truy Xuất Tài Nguyên)",
+        "duration_ms": 5.5
+      },
+      {
+        "step": 4,
+        "name": "Completeness Validator (Kiểm Định Toàn Vẹn)",
+        "duration_ms": 0.6
+      },
+      {
+        "step": 5,
+        "name": "Context Package (Đóng Gói & Làm Sạch)",
+        "duration_ms": 0.6
+      },
+      {
+        "step": 6,
+        "name": "Response Synthesizer (Tổng Hợp Câu Trả Lời)",
+        "duration_ms": 5666.9
+      },
+      {
+        "step": 7,
+        "name": "Pipeline Telemetry & Tổng Kết",
+        "duration_ms": 0.1
+      }
+    ],
+    "answer_preview": "Chào anh/chị Nguyễn Văn An,  Cảm ơn anh/chị đã liên hệ. Dưới đây là thông tin chi tiết về đơn hàng số 5 và điều kiện hoàn tiền áp dụng cho anh/chị:  **Thông tin đơn hàng số 5:** *   **Mã đơn hàng:** 5..."
+  },
+  {
+    "id": "CASE_2",
+    "name": "Tra cứu lịch sử đơn & sản phẩm",
+    "query": "Kiểm tra danh sách đơn hàng của khách hàng Nguyễn Văn An và các sản phẩm đã mua?",
+    "intent": "order_lookup",
+    "entities": {
+      "customer": "Nguyễn Văn An",
+      "order_id": null,
+      "product": null,
+      "tier": null
+    },
+    "required_context": [
+      "customers",
+      "orders",
+      "products"
+    ],
+    "sources_retrieved": [
+      "customers",
+      "orders",
+      "products"
+    ],
+    "completeness_score": 100,
+    "total_duration_ms": 7118.9,
+    "checkpoints": [
+      {
+        "step": 1,
+        "name": "Khởi Tạo Yêu Cầu & Snapshot Catalog",
+        "duration_ms": 2.9
+      },
+      {
+        "step": 2,
+        "name": "Context Planner (AI Planning)",
+        "duration_ms": 3189.7
+      },
+      {
+        "step": 3,
+        "name": "Context Retriever (Truy Xuất Tài Nguyên)",
+        "duration_ms": 3.9
+      },
+      {
+        "step": 4,
+        "name": "Completeness Validator (Kiểm Định Toàn Vẹn)",
+        "duration_ms": 1.0
+      },
+      {
+        "step": 5,
+        "name": "Context Package (Đóng Gói & Làm Sạch)",
+        "duration_ms": 0.6
+      },
+      {
+        "step": 6,
+        "name": "Response Synthesizer (Tổng Hợp Câu Trả Lời)",
+        "duration_ms": 3920.8
+      },
+      {
+        "step": 7,
+        "name": "Pipeline Telemetry & Tổng Kết",
+        "duration_ms": 0.1
+      }
+    ],
+    "answer_preview": "Chào bạn Nguyễn Văn An,  Cảm ơn bạn đã liên hệ. Dựa trên thông tin tôi có, tôi đã kiểm tra danh sách đơn hàng của bạn như sau:  *   **Tên khách hàng:** Nguyễn Văn An *   **Chi tiết đơn hàng:**     *  ..."
+  },
+  {
+    "id": "CASE_3",
+    "name": "Chính sách vận chuyển hỏa tốc theo Tier",
+    "query": "Chính sách giao hàng hỏa tốc 2 giờ có miễn phí cho khách hàng Gold và Platinum không?",
+    "intent": "delivery_inquiry",
+    "entities": {
+      "customer": null,
+      "order_id": null,
+      "product": null,
+      "tier": "Gold, Platinum"
+    },
+    "required_context": [
+      "delivery_policy",
+      "vip_policy"
+    ],
+    "sources_retrieved": [
+      "delivery_policy",
+      "vip_policy"
+    ],
+    "completeness_score": 100,
+    "total_duration_ms": 8774.5,
+    "checkpoints": [
+      {
+        "step": 1,
+        "name": "Khởi Tạo Yêu Cầu & Snapshot Catalog",
+        "duration_ms": 3.9
+      },
+      {
+        "step": 2,
+        "name": "Context Planner (AI Planning)",
+        "duration_ms": 5803.2
+      },
+      {
+        "step": 3,
+        "name": "Context Retriever (Truy Xuất Tài Nguyên)",
+        "duration_ms": 4.3
+      },
+      {
+        "step": 4,
+        "name": "Completeness Validator (Kiểm Định Toàn Vẹn)",
+        "duration_ms": 0.8
+      },
+      {
+        "step": 5,
+        "name": "Context Package (Đóng Gói & Làm Sạch)",
+        "duration_ms": 0.6
+      },
+      {
+        "step": 6,
+        "name": "Response Synthesizer (Tổng Hợp Câu Trả Lời)",
+        "duration_ms": 2961.6
+      },
+      {
+        "step": 7,
+        "name": "Pipeline Telemetry & Tổng Kết",
+        "duration_ms": 0.1
+      }
+    ],
+    "answer_preview": "Chào bạn,  Dựa trên thông tin chính sách, giao hàng hỏa tốc 2 giờ được miễn phí cho khách hàng hạng Gold và Platinum.  Cụ thể: *   **Hạng Gold & Platinum**: Được miễn phí 100% mọi hình thức giao hàng,..."
+  },
+  {
+    "id": "CASE_4",
+    "name": "Thời hạn & Phí đổi trả hạng Platinum",
+    "query": "Khách hàng hạng Platinum được đổi trả hàng trong bao lâu và có mất phí không?",
+    "intent": "vip_benefits",
+    "entities": {
+      "customer": null,
+      "order_id": null,
+      "product": null,
+      "tier": "Platinum"
+    },
+    "required_context": [
+      "refund_policy",
+      "vip_policy"
+    ],
+    "sources_retrieved": [
+      "refund_policy",
+      "vip_policy"
+    ],
+    "completeness_score": 100,
+    "total_duration_ms": 7759.6,
+    "checkpoints": [
+      {
+        "step": 1,
+        "name": "Khởi Tạo Yêu Cầu & Snapshot Catalog",
+        "duration_ms": 2.3
+      },
+      {
+        "step": 2,
+        "name": "Context Planner (AI Planning)",
+        "duration_ms": 5811.9
+      },
+      {
+        "step": 3,
+        "name": "Context Retriever (Truy Xuất Tài Nguyên)",
+        "duration_ms": 3.0
+      },
+      {
+        "step": 4,
+        "name": "Completeness Validator (Kiểm Định Toàn Vẹn)",
+        "duration_ms": 0.6
+      },
+      {
+        "step": 5,
+        "name": "Context Package (Đóng Gói & Làm Sạch)",
+        "duration_ms": 0.5
+      },
+      {
+        "step": 6,
+        "name": "Response Synthesizer (Tổng Hợp Câu Trả Lời)",
+        "duration_ms": 1941.3
+      },
+      {
+        "step": 7,
+        "name": "Pipeline Telemetry & Tổng Kết",
+        "duration_ms": 0.1
+      }
+    ],
+    "answer_preview": "Chào bạn,  Dựa trên chính sách hiện hành, khách hàng hạng **Platinum** có các quyền lợi đổi trả như sau: *   **Thời hạn đổi trả miễn phí:** Trong vòng **45 ngày** kể từ khi nhận hàng. Đặc biệt, bạn sẽ..."
+  },
+  {
+    "id": "CASE_5",
+    "name": "Edge Case - Đơn hàng / Khách hàng không tồn tại",
+    "query": "Khách hàng Trần Văn X kiểm tra đơn hàng 9999 có được đổi trả không?",
+    "intent": "refund_eligibility",
+    "entities": {
+      "customer": "Trần Văn X",
+      "order_id": "9999",
+      "product": null,
+      "tier": null
+    },
+    "required_context": [
+      "customers",
+      "orders",
+      "refund_policy"
+    ],
+    "sources_retrieved": [
+      "customers",
+      "orders",
+      "refund_policy"
+    ],
+    "completeness_score": 100,
+    "total_duration_ms": 6450.2,
+    "checkpoints": [
+      {
+        "step": 1,
+        "name": "Khởi Tạo Yêu Cầu & Snapshot Catalog",
+        "duration_ms": 3.4
+      },
+      {
+        "step": 2,
+        "name": "Context Planner (AI Planning)",
+        "duration_ms": 3779.6
+      },
+      {
+        "step": 3,
+        "name": "Context Retriever (Truy Xuất Tài Nguyên)",
+        "duration_ms": 5.8
+      },
+      {
+        "step": 4,
+        "name": "Completeness Validator (Kiểm Định Toàn Vẹn)",
+        "duration_ms": 0.5
+      },
+      {
+        "step": 5,
+        "name": "Context Package (Đóng Gói & Làm Sạch)",
+        "duration_ms": 0.5
+      },
+      {
+        "step": 6,
+        "name": "Response Synthesizer (Tổng Hợp Câu Trả Lời)",
+        "duration_ms": 2660.4
+      },
+      {
+        "step": 7,
+        "name": "Pipeline Telemetry & Tổng Kết",
+        "duration_ms": 0.1
+      }
+    ],
+    "answer_preview": "Chào bạn,  Rất tiếc, tôi không tìm thấy thông tin về \"khách hàng Trần Văn X\" hoặc \"đơn hàng 9999\" trong các tài liệu hiện có.  Để có thể kiểm tra chính xác điều kiện đổi trả cho khách hàng và đơn hàng..."
+  }
+]
